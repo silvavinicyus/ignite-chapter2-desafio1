@@ -15,9 +15,7 @@ class ListAllUsersController {
 
       return response.json(users);
     } catch (err) {
-      return response
-        .status(400)
-        .json({ error: "User with the given id is not a admin" });
+      return response.status(400).json({ error: err.message });
     }
   }
 }
