@@ -1,0 +1,233 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "This is the official documentation of Atlas API",
+        "description": "This is the official documentation of the Challenge #1 in Chapter 2 from de rocketseat's bootcamp: Ignite ",
+        "version": "1.0.0",
+        "contact":  {
+            "email": "vinicyus346@gmail.com"
+        }
+    },
+    "paths": {
+        "/users":{
+            "post": {
+                "tags": ["User"],
+                "summary": "Create a new user",
+                "description": "Create a new user for the application",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "User name sample",
+                                    "email": "examplemail@mail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "id": "30b7355f-df33-4a53-9e41-8d9ca44f21f2",
+                                        "admin": false,
+                                        "name": "Vinicyus",
+                                        "email": "vinicyus@gmail.com",
+                                        "created_at": "2021-03-18T19:18:21.012Z",
+                                        "updated_at": "2021-03-18T19:18:21.012Z"
+                                    }                                    
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email already used",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "error": "Email already used"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["User"],
+                "summary": "Return all the users",
+                "description": "Return all users that are in the database when requested by an admin",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "user_id",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses":  {
+                    "200": {
+                        "description": "Users successfully listed",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": [{
+                                        "id": "30b7355f-df33-4a53-9e41-8d9ca44f21f2",
+                                        "admin": false,
+                                        "name": "Vinicyus",
+                                        "email": "vinicyus@gmail.com",
+                                        "created_at": "2021-03-18T19:18:21.012Z",
+                                        "updated_at": "2021-03-18T19:18:21.012Z"
+                                    },
+                                    {
+                                        "id": "995e5a8a-8933-41c3-a564-fbfea9d42e0c",
+                                        "admin": true,
+                                        "name": "Carlos",
+                                        "email": "carlos@gmail.com",
+                                        "created_at": "2021-03-18T19:29:57.910Z",
+                                        "updated_at": "2021-03-18T19:29:57.910Z"
+                                    }]   
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "'There is no user with the given id' or 'This user is not an admin'",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "error": "'There is no user with the given id' or 'This user is not an admin'"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["User"],
+                "summary": "Turn a normal user into an admin",
+                "description": "Turn a normal user into an admin, a user who has power to do anything in the application",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",                        
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "User now is an admin",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "id": "30b7355f-df33-4a53-9e41-8d9ca44f21f2",
+                                        "admin": true,
+                                        "name": "Vinicyus",
+                                        "email": "vinicyus@gmail.com",
+                                        "created_at": "2021-03-18T19:18:21.012Z",
+                                        "updated_at": "2021-03-18T19:18:21.012Z"
+                                    }  
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "There is no user with the given id",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "error": "There is no user with the given id"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get":{
+                "tags": ["User"],
+                "summary": "Return a user",
+                "description": "Return a user who belong to the given id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user_id",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "User who belong to the given id",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "id": "30b7355f-df33-4a53-9e41-8d9ca44f21f2",
+                                        "admin": false,
+                                        "name": "Vinicyus",
+                                        "email": "vinicyus@gmail.com",
+                                        "created_at": "2021-03-18T19:18:21.012Z",
+                                        "updated_at": "2021-03-18T19:18:21.012Z"
+                                    }  
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "There is no user with the given id",
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "example": {
+                                        "error": "There is no user with the given id"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
