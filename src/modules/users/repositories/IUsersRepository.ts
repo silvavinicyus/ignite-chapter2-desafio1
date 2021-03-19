@@ -6,11 +6,11 @@ interface ICreateUserDTO {
 }
 
 interface IUsersRepository {
-  create({ name, email }: ICreateUserDTO): User;
-  findById(id: string): User | undefined;
-  findByEmail(email: string): User | undefined;
-  turnAdmin(user: User): User;
-  list(): User[];
+  createUser({ name, email }: ICreateUserDTO): User | Promise<User>;
+  findById(id: string): User | undefined | Promise<User>;
+  findByEmail(email: string): User | undefined | Promise<User>;
+  turnAdmin(user: User): User | Promise<User>;
+  list(): User[] | Promise<User[]>;
 }
 
 export { IUsersRepository, ICreateUserDTO };

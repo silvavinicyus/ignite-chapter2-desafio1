@@ -1,8 +1,10 @@
-import { UsersRepository } from "../../repositories/implementations/UsersRepository";
+import { getCustomRepository } from "typeorm";
+
+import PostgresUserRepository from "../../repositories/implementations/PostgresUserRepository";
 import { ShowUserProfileController } from "./ShowUserProfileController";
 import { ShowUserProfileUseCase } from "./ShowUserProfileUseCase";
 
-const usersRepository = UsersRepository.getInstance();
+const usersRepository = getCustomRepository(PostgresUserRepository);
 const showUserProfileUseCase = new ShowUserProfileUseCase(usersRepository);
 const showUserProfileController = new ShowUserProfileController(
   showUserProfileUseCase
