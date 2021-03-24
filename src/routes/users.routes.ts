@@ -1,3 +1,4 @@
+import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
 
 import { CreateUserController } from "../modules/users/useCases/createUser/CreateUserController";
@@ -12,12 +13,45 @@ const listAllUsersController = new ListAllUsersController();
 const showUserProfileController = new ShowUserProfileController();
 const turnUserAdminController = new TurnUserAdminController();
 
-usersRoutes.post("/", createUserController.handle);
+usersRoutes.post(
+  "/",
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      email: Joi.string().email().required,
+    },
+  }),
+  createUserController.handle
+);
 
-usersRoutes.patch("/:user_id/admin", turnUserAdminController.handle);
+usersRoutes.patch(
+  "/:user_id/admin",
+  celebrate({
+    [Segments.PARAMS]: {
+      user_id: Joi.string().uuid(),
+    },
+  }),
+  turnUserAdminController.handle
+);
 
-usersRoutes.get("/:user_id", showUserProfileController.handle);
+usersRoutes.get(
+  "/:user_id",
+  celebrate({
+    [Segments.PARAMS]: {
+      user_id: Joi.string().uuid(),
+    },
+  }),
+  showUserProfileController.handle
+);
 
-usersRoutes.get("/", listAllUsersController.handle);
+usersRoutes.get(
+  "/",
+  celebrate({
+    [Segments.HEADERS]: Joi.object({
+      user_id: Joi.string().uuid(),
+    }).unknown(),
+  }),
+  listAllUsersController.handle
+);
 
 export { usersRoutes };

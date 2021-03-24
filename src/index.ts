@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import { errors } from "celebrate";
 import express from "express";
 import swaggerUI from "swagger-ui-express";
 
@@ -15,5 +16,7 @@ app.use(express.json());
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 app.use("/users", usersRoutes);
+
+app.use(errors());
 
 export { app };
