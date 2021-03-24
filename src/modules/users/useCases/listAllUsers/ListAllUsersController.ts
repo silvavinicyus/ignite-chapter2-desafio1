@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
 
 import { ListAllUsersUseCase } from "./ListAllUsersUseCase";
 
 class ListAllUsersController {
-  constructor(private listAllUsersUseCase: ListAllUsersUseCase) {}
-
-  handle(request: Request, response: Response): Response {
+  async handle(request: Request, response: Response): Promise<Response> {
     const { user_id } = request.headers;
 
+    const listAllUsersUseCase = container.resolve(ListAllUsersUseCase);
+
     try {
-      const users = this.listAllUsersUseCase.execute({
+      const users = await listAllUsersUseCase.execute({
         user_id: String(user_id),
       });
 
